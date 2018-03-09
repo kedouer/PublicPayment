@@ -1,0 +1,33 @@
+1、pod：集成SDK （配置 跳转白名单、URL Scheme）
+    pod 'SnapKit'
+    pod 'WechatOpenSDK'
+    pod 'AliPay'
+
+2、Bridging-Header.h 文件中
+    #import "WXApi.h"
+    #import <AlipaySDK/AlipaySDK.h>
+
+3、PublicPayViewController使用：
+
+    let payment = Payment()
+    payment.prj = "joy"
+    payment.sourceEntity = "JOY_Match"
+    payment.type = payment_PaymentType.payment
+    payment.sourceEntityID = match.objectId
+    payment.orderno = match.orderno
+    payment.saveInfo(finishBlock: { (succeed, payResponse) in
+    let paymenterResponse =  payResponse as! Payment
+
+    //初始化支付信息
+    let payInfo = PaymentModel()
+    payInfo.paymentTitle = "服务订单"
+    payInfo.paymentPrice = match.totalprice
+    payInfo.paymentId = paymenterResponse.objectId
+    payInfo.paymentPrj = "joy"
+    payInfo.orderId = match.objectId
+
+    let payController = PublicPayViewController()
+    payController.payInfo = payInfo
+    self.navigationController?.pushViewController(payController, animated: true)
+
+4、导入图片素材
